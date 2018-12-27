@@ -11,31 +11,23 @@ public class CommandListener extends ListenerAdapter {
         //Bot自身のメッセージには反応しない
         if (event.getAuthor().equals(event.getJDA().getSelfUser())) return;
 
-        //メッセージが ! から始まる場合
-        if (event.getMessage().getContentRaw().startsWith("!")) {
+        //pingコマンド
+        if (event.getMessage().getContentRaw().matches("^(?i)!ping$")) {
+            event.getChannel().sendMessage("Pong!").queue();
+            event.getChannel().sendMessage("WebSocket Ping is " + event.getJDA().getPing() + "ms").queue();
+            return;
+        }
 
-            //Prefixを除いたものだけにする
-            String Command = event.getMessage().getContentRaw().replaceAll("^!", "");
+        //pinのみ
+        if (event.getMessage().getContentRaw().matches("^(?i)!pin$")) event.getChannel().sendMessage("`!pin <enable/disable>`").queue();
 
-            //pingコマンド
-            if (Command.equalsIgnoreCase("ping") || Command.startsWith("ping")) {
-                event.getChannel().sendMessage("Pong!").queue();
-                event.getChannel().sendMessage("WebSocket Ping is " + event.getJDA().getPing() + "ms").queue();
-                return;
-            }
-
-            //pin+オプション付
-            if (Command.startsWith("pin ")) {
-                String[] args = Command.replaceAll("^pin ", "").split(" ");
-                if (args[0].equalsIgnoreCase("enable")) PINDOME_ENABLED = true;
-                else if (args[0].equalsIgnoreCase("disable")) PINDOME_ENABLED = false;
-                else return;
-                event.getChannel().sendMessage(PINDOME_ENABLED ? "ピン留めくん機能を有効化しました。" : "ピン留めくん機能を無効化しました。").queue();
-                return;
-            }
-
-            //pinのみ
-            if (Command.startsWith("pin")) event.getChannel().sendMessage("`!pin <enable/disable>`").queue();
+        //pin+オプション付
+        if (event.getMessage().getContentRaw().matches("^(?i)!pin .*")) {
+            String[] args = event.getMessage().getContentRaw().replaceAll("^!pin ", "").split(" ");
+            if (args[0].equalsIgnoreCase("enable")) PINDOME_ENABLED = true;
+            else if (args[0].equalsIgnoreCase("disable")) PINDOME_ENABLED = false;
+            else return;
+            event.getChannel().sendMessage(PINDOME_ENABLED ? "ピン留めくん機能を有効化しました。" : "ピン留めくん機能を無効化しました。").queue();
         }
     }
 }
