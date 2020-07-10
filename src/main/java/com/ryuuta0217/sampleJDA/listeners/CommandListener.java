@@ -1,5 +1,6 @@
 package com.ryuuta0217.sampleJDA.listeners;
 
+import com.ryuuta0217.sampleJDA.Main;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -14,10 +15,10 @@ public class CommandListener extends ListenerAdapter {
         if (event.getAuthor().equals(event.getJDA().getSelfUser())) return;
 
         //メッセージが ! から始まる場合
-        if (event.getMessage().getContentRaw().startsWith("!")) {
+        if (event.getMessage().getContentRaw().startsWith(Main.PREFIX)) {
 
             //Prefixを除いたものだけにする
-            String Command = event.getMessage().getContentRaw().replaceAll("^!", "");
+            String Command = event.getMessage().getContentRaw().replaceAll("^" + Main.PREFIX, "");
 
             //about
             if(Command.equalsIgnoreCase("about")) {
@@ -49,7 +50,7 @@ public class CommandListener extends ListenerAdapter {
             }
 
             //pinのみ
-            if (Command.startsWith("pin")) event.getChannel().sendMessage("`!pin <enable/disable>`").queue();
+            if (Command.startsWith("pin")) event.getChannel().sendMessage("`" + Main.PREFIX + "pin <enable/disable>`").queue();
         }
     }
 }
