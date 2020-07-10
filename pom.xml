@@ -16,9 +16,9 @@
     <!-- 依存関係(ライブラリ) レポジトリ -->
     <repositories>
         <repository>
-            <id>central</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
+            <id>jcenter</id>
+            <name>jcenter-bintray</name>
+            <url>https://jcenter.bintray.com</url>
         </repository>
     </repositories>
 
@@ -34,13 +34,13 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>LATEST</version>
+            <version>4.2.0_175</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!-- src/Main/java 配下のみの .jar -->
+            <!-- src/main/java 配下のみの .jar -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
