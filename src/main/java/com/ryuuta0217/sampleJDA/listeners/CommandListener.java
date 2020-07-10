@@ -25,7 +25,6 @@ public class CommandListener extends ListenerAdapter {
                         .setAuthor(event.getJDA().getSelfUser().getName(), null, event.getJDA().getSelfUser().getAvatarUrl())
                         .setTitle("Java JDA Example Bot by [dischadev]ryuuta0217", "https://github.com/ryuuta0217")
                         .setDescription("pingコマンド、pinコマンド、aboutコマンドが使用可能です :relaxed:")
-                        .setFooter("私はHerokuで動いています :)", "https://img.icons8.com/color/1600/heroku.png")
                         .build();
                 event.getChannel().sendMessage(eb).queue();
                 return;

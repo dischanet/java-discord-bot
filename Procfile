@@ -1,1 +1,0 @@
-web: java -jar discha-JDA-1.0.jar
