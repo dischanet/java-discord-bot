@@ -1,9 +1,9 @@
 package com.ryuuta0217.sampleJDA.listeners;
 
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import static com.ryuuta0217.sampleJDA.Main.PINDOME_ENABLED;
 
@@ -34,7 +34,8 @@ public class CommandListener extends ListenerAdapter {
             //ping
             if (Command.equalsIgnoreCase("ping") || Command.startsWith("ping")) {
                 event.getChannel().sendMessage("Pong!").queue();
-                event.getChannel().sendMessage("WebSocket Ping is " + event.getJDA().getPing() + "ms").queue();
+                event.getChannel().sendMessage("Gateway Ping is " + event.getJDA().getGatewayPing() + "ms").queue();
+                event.getChannel().sendMessage("RestAction Ping is " + event.getJDA().getRestPing().complete()).queue();
                 return;
             }
 

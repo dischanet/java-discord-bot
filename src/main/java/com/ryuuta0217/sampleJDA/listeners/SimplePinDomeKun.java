@@ -1,10 +1,10 @@
 package com.ryuuta0217.sampleJDA.listeners;
 
 import com.ryuuta0217.sampleJDA.Main;
-import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionAddEvent;
-import net.dv8tion.jda.core.events.message.guild.react.GuildMessageReactionRemoveEvent;
-import net.dv8tion.jda.core.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionRemoveEvent;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 public class SimplePinDomeKun extends ListenerAdapter {
     @Override
@@ -18,7 +18,7 @@ public class SimplePinDomeKun extends ListenerAdapter {
             //追加されたリアクションが 📌 かどうか
             if(event.getReactionEmote().getName().equals("\uD83D\uDCCC")) {
                 //📌 ならチャンネルのピン留めリストを確認
-                if(event.getChannel().getPinnedMessages().complete().stream().noneMatch(m -> m.getId().equals(event.getMessageId()))) {
+                if(event.getChannel().retrievePinnedMessages().complete().stream().noneMatch(m -> m.getId().equals(event.getMessageId()))) {
                     //ピン留めリストに存在しなかったらピン留め
                     event.getChannel().pinMessageById(event.getMessageId()).complete();
                 }
@@ -29,7 +29,7 @@ public class SimplePinDomeKun extends ListenerAdapter {
                             "管理者に要求するか、権限をお持ちの場合は権限を %s に付与してください。",
                     event.getGuild().getName(),
                     event.getChannel().getAsMention(),
-                    event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw().length() > 7 ? event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw().substring(0, 7)+"..." : event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw(),
+                    event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw().length() > 7 ? event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw().substring(0, 7)+"..." : event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw(),
                     event.getJDA().getSelfUser().getAsMention())).queue();
         }
     }
@@ -45,21 +45,21 @@ public class SimplePinDomeKun extends ListenerAdapter {
             //削除されたリアクションが 📌 かどうか
             if(event.getReactionEmote().getName().equals("\uD83D\uDCCC")) {
                 //📌 ならチャンネルのピン留めリストを確認
-                if(event.getChannel().getPinnedMessages().complete().stream().anyMatch(m -> m.getId().equals(event.getMessageId()))) {
+                if(event.getChannel().retrievePinnedMessages().complete().stream().anyMatch(m -> m.getId().equals(event.getMessageId()))) {
                     //ピン留めリストに存在したらピン留めを解除
                     event.getChannel().unpinMessageById(event.getMessageId()).complete();
                 }
             }
         } else {
             //ピン留めされているメッセージの中に対象のメッセージが存在するかどうか。存在しないなら権限がない旨を伝えずに終了。
-            if(event.getChannel().getPinnedMessages().complete().stream().noneMatch(m -> m.getId().equals(event.getMessageId()))) return;
+            if(event.getChannel().retrievePinnedMessages().complete().stream().noneMatch(m -> m.getId().equals(event.getMessageId()))) return;
 
             //リアクションを削除した人のDMに権限がない旨を伝える。
             event.getUser().openPrivateChannel().complete().sendMessage(String.format("サーバー %s チャンネル %s のメッセージ %s のピン留めを削除しようとしましたが、Botが権限を所有していません。\n" +
                     "管理者に要求するか、権限をお持ちの場合は権限を %s に付与してください。",
                     event.getGuild().getName(),
                     event.getChannel().getName(),
-                    event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw().length() > 7 ? event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw().substring(0, 7)+"..." : event.getChannel().getMessageById(event.getMessageId()).complete().getContentRaw(),
+                    event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw().length() > 7 ? event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw().substring(0, 7)+"..." : event.getChannel().getHistory().getMessageById(event.getMessageId()).getContentRaw(),
                     event.getJDA().getSelfUser().getAsMention())).queue();
         }
     }
